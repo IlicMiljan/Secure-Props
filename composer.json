@@ -1,5 +1,7 @@
 {
     "name": "ilicmiljan/secure-props",
+    "description": "Powerful PHP library designed to simplify the encryption and decryption of property data in objects.",
+    "keywords": ["encryption", "decryption", "aes", "rsa"],
     "type": "library",
     "autoload": {
         "psr-4": {
