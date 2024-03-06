@@ -83,11 +83,11 @@ $cipher = new AsymmetricEncryptionCipher($publicKey, $privateKey);
 
 SecureProps comes with two implementations of property readers: a runtime one and a decorator for caching.
 
-### `RuntimeObjectPropertiesReader`
+### RuntimeObjectPropertiesReader
 
 This reader inspects objects at runtime to find properties marked with the `#[Encrypted]` attribute. It uses PHP's reflection capabilities to perform its duties without requiring any caching mechanism.
 
-### `CachingObjectPropertiesReader`
+### CachingObjectPropertiesReader
 
 This reader wraps another `ObjectPropertiesReader` implementation and caches the results to improve performance. It's particularly useful for applications that repeatedly process the same object types, reducing the overhead of reflection operations. The `PSR-6` caching standard provides a flexible framework for integrating various caching backends, offering developers the freedom to choose a solution that best fits their application's scaling and performance requirements.
 
