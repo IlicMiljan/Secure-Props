@@ -53,7 +53,7 @@ class CachingObjectPropertiesReader implements ObjectPropertiesReader
 
     private function getCacheKey(object $object, string $attributeClass): string
     {
-        return sprintf("%s|%s", $object::class, $attributeClass);
+        return hash('md5', sprintf("%s|%s", $object::class, $attributeClass));
     }
 
     /**
