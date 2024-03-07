@@ -18,9 +18,6 @@ class StringEncryptionServiceTest extends TestCase
     private $cipherMock;
     private StringEncryptionService $service;
 
-    /**
-     * @throws Exception
-     */
     protected function setUp(): void
     {
         $this->cipherMock = $this->createMock(Cipher::class);
