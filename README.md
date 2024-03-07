@@ -1,5 +1,11 @@
 # SecureProps - PHP Encryption Library
 
+![stability-beta](https://img.shields.io/badge/stability-beta-33bbff.svg)
+![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/ilicmiljan/secure-props/php-ci.yaml)
+[![codecov](https://codecov.io/github/IlicMiljan/Secure-Props/branch/main/graph/badge.svg?token=7EQBUFHJKR)](https://codecov.io/github/IlicMiljan/Secure-Props)
+![Packagist PHP Version](https://img.shields.io/packagist/dependency-v/ilicmiljan/secure-props/php)
+![GitHub](https://img.shields.io/github/license/ilicmiljan/secure-props)
+
 SecureProps is a powerful PHP library designed to simplify the encryption and decryption of property data in objects. 
 
 Utilizing the power of PHP attributes, SecureProps allows developers to easily secure sensitive data within their applications. The library supports both asymmetric and symmetric encryption methods, providing flexibility in securing your application data.
