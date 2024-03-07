@@ -24,7 +24,6 @@ class AsymmetricEncryptionCipherTest extends TestCase
         /** @var string[] $asymmetricKeyDetails */
         $asymmetricKeyDetails = openssl_pkey_get_details($asymmetricKey);
 
-        $privateKey = '';
         openssl_pkey_export($asymmetricKey, $privateKey);
 
         $this->cipher = new AsymmetricEncryptionCipher($asymmetricKeyDetails['key'], $privateKey);

@@ -34,7 +34,6 @@ class AdvancedEncryptionStandardCipher implements Cipher
     public function encrypt(#[SensitiveParameter] string $string): string
     {
         $iv = $this->generateInitializationVector(self::CIPHER);
-        $tag = '';
 
         $encryptedString = openssl_encrypt($string, self::CIPHER, $this->key, 0, $iv, $tag, '', self::TAG_LENGTH);
 
