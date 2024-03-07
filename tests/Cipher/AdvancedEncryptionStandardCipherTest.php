@@ -15,14 +15,14 @@ class AdvancedEncryptionStandardCipherTest extends TestCase
         $this->cipher = new AdvancedEncryptionStandardCipher(openssl_random_pseudo_bytes(32));
     }
 
-    public function testConstructWithInvalidKeyLengthThrowsException()
+    public function testConstructWithInvalidKeyLengthThrowsException(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
         new AdvancedEncryptionStandardCipher(openssl_random_pseudo_bytes(16));
     }
 
-    public function testEncryptAndDecryptSuccessfully()
+    public function testEncryptAndDecryptSuccessfully(): void
     {
         $encryptedString = $this->cipher->encrypt('plainText');
         $decryptedString = $this->cipher->decrypt($encryptedString);

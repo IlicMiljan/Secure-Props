@@ -9,6 +9,7 @@ use IlicMiljan\SecureProps\Reader\Exception\ObjectPropertyNotFound;
 use IlicMiljan\SecureProps\Reader\ObjectPropertiesReader;
 use IlicMiljan\SecureProps\Tests\Attribute\TestAttribute;
 use IlicMiljan\SecureProps\Tests\Reader\Exception\TestCacheException;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
@@ -16,8 +17,17 @@ use ReflectionException;
 
 class CachingObjectPropertiesReaderTest extends TestCase
 {
+    /**
+     * @var ObjectPropertiesReader&MockObject
+     */
     private $objectPropertiesReader;
+    /**
+     * @var CacheItemPoolInterface&MockObject
+     */
     private $cacheItemPool;
+    /**
+     * @var CacheItemInterface&MockObject
+     */
     private $cacheItem;
     private CachingObjectPropertiesReader $reader;
 
@@ -36,8 +46,9 @@ class CachingObjectPropertiesReaderTest extends TestCase
 
     public function testGetPropertiesWithAttributeReturnsCachedValueOnHit(): void
     {
-        $object = new class() {
+        $object = new class () {
             #[TestAttribute]
+            /** @phpstan-ignore-next-line */
             private string $propertyWithAttribute;
         };
 
@@ -52,7 +63,8 @@ class CachingObjectPropertiesReaderTest extends TestCase
 
     public function testGetPropertiesWithAttributeFetchesFromDelegateOnCacheMiss(): void
     {
-        $object = new class() {};
+        $object = new class () {
+        };
 
         $this->cacheItem->method('isHit')->willReturn(false);
         $this->objectPropertiesReader->method('getPropertiesWithAttribute')->willReturn([]);
@@ -67,7 +79,8 @@ class CachingObjectPropertiesReaderTest extends TestCase
 
         $this->cacheItemPool->method('getItem')->willThrowException(new TestCacheException());
 
-        $this->reader->getPropertiesWithAttribute(new class() {}, TestAttribute::class);
+        $this->reader->getPropertiesWithAttribute(new class () {
+        }, TestAttribute::class);
     }
 
     public function testGetPropertiesWithAttributeThrowsInvalidCacheValueDataType(): void
@@ -77,7 +90,11 @@ class CachingObjectPropertiesReaderTest extends TestCase
         $this->cacheItem->method('isHit')->willReturn(true);
         $this->cacheItem->method('get')->willReturn(null);
 
-        $this->reader->getPropertiesWithAttribute(new class() {}, TestAttribute::class);
+        $this->reader->getPropertiesWithAttribute(
+            new class () {
+            },
+            TestAttribute::class
+        );
     }
 
     public function testGetPropertiesWithAttributeThrowsObjectPropertyNotFound(): void
@@ -93,6 +110,10 @@ class CachingObjectPropertiesReaderTest extends TestCase
             ->willThrowException(new ReflectionException());
 
         $reader = new CachingObjectPropertiesReader($this->objectPropertiesReader, $this->cacheItemPool);
-        $reader->getPropertiesWithAttribute(new class() {}, TestAttribute::class);
+        $reader->getPropertiesWithAttribute(
+            new class () {
+            },
+            TestAttribute::class
+        );
     }
 }

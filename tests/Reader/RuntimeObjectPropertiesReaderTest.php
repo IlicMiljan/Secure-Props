@@ -16,9 +16,10 @@ class RuntimeObjectPropertiesReaderTest extends TestCase
         $this->reader = new RuntimeObjectPropertiesReader();
     }
 
-    public function testGetPropertiesWithAttributeReturnsEmptyArrayWhenNoPropertiesHaveAttribute()
+    public function testGetPropertiesWithAttributeReturnsEmptyArrayWhenNoPropertiesHaveAttribute(): void
     {
         $object = new class {
+            /** @phpstan-ignore-next-line */
             private string $propertyWithoutAttribute;
         };
 
@@ -27,12 +28,14 @@ class RuntimeObjectPropertiesReaderTest extends TestCase
         $this->assertEmpty($properties);
     }
 
-    public function testGetPropertiesWithAttributeIdentifiesPropertiesWithAttribute()
+    public function testGetPropertiesWithAttributeIdentifiesPropertiesWithAttribute(): void
     {
         $object = new class {
             #[TestAttribute]
+            /** @phpstan-ignore-next-line */
             private string $propertyWithAttribute;
 
+            /** @phpstan-ignore-next-line */
             private string $propertyWithoutAttribute;
         };
 
@@ -42,12 +45,12 @@ class RuntimeObjectPropertiesReaderTest extends TestCase
         $this->assertEquals('propertyWithAttribute', $properties[0]->getName());
     }
 
-    public function testGetPropertiesWithAttributeHandlesObjectsWithNoProperties()
+    public function testGetPropertiesWithAttributeHandlesObjectsWithNoProperties(): void
     {
-        $reader = new RuntimeObjectPropertiesReader();
-        $object = new class {};
+        $object = new class {
+        };
 
-        $properties = $reader->getPropertiesWithAttribute($object, TestAttribute::class);
+        $properties = $this->reader->getPropertiesWithAttribute($object, TestAttribute::class);
 
         $this->assertEmpty($properties);
     }

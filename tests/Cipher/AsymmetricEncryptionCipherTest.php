@@ -10,6 +10,7 @@ use IlicMiljan\SecureProps\Reader\Exception\FailedDecryptingValue;
 use IlicMiljan\SecureProps\Reader\Exception\FailedEncryptingValue;
 use IlicMiljan\SecureProps\Reader\Exception\FailedGeneratingInitializationVector;
 use InvalidArgumentException;
+use OpenSSLAsymmetricKey;
 use PHPUnit\Framework\TestCase;
 
 class AsymmetricEncryptionCipherTest extends TestCase
@@ -18,17 +19,18 @@ class AsymmetricEncryptionCipherTest extends TestCase
 
     protected function setUp(): void
     {
+        /** @var OpenSSLAsymmetricKey $asymmetricKey */
         $asymmetricKey = openssl_pkey_new();
-
-        $publicKey = openssl_pkey_get_details($asymmetricKey)['key'];
+        /** @var string[] $asymmetricKeyDetails */
+        $asymmetricKeyDetails = openssl_pkey_get_details($asymmetricKey);
 
         $privateKey = '';
         openssl_pkey_export($asymmetricKey, $privateKey);
 
-        $this->cipher = new AsymmetricEncryptionCipher($publicKey, $privateKey);
+        $this->cipher = new AsymmetricEncryptionCipher($asymmetricKeyDetails['key'], $privateKey);
     }
 
-    public function testEncryptAndDecryptSuccessfully()
+    public function testEncryptAndDecryptSuccessfully(): void
     {
         $encryptedString = $this->cipher->encrypt('plainText');
         $decryptedString = $this->cipher->decrypt($encryptedString);
