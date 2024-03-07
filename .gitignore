@@ -40,4 +40,5 @@
 /vendor/
 
 # PHPUnit
+/coverage-output/
 .phpunit.result.cache
