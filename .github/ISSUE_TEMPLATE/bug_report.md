@@ -20,7 +20,7 @@ Please provide a code snippet or explicit steps that reproduce the behavior:
 A clear and concise description of what you expected to happen.
 
 ### Environment (please complete the following information):
-- RetryMaster version: [e.g. 1.0.0]
+- SecureProps version: [e.g. 1.0.0]
 - PHP version: [e.g. 8.0]
 
 ### Actual Output / Stack Trace
