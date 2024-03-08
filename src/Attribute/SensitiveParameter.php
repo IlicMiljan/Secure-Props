@@ -10,7 +10,7 @@
  * older PHP versions but enables forward compatibility with PHP 8.2 and newer.
  */
 
-if (PHP_VERSION_ID < 80200) {
+if (PHP_VERSION_ID < 80200 && !class_exists('SensitiveParameter')) {
     #[Attribute(Attribute::TARGET_PARAMETER)]
     final class SensitiveParameter
     {
