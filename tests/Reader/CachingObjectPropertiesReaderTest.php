@@ -2,8 +2,8 @@
 
 namespace IlicMiljan\SecureProps\Tests\Reader;
 
+use IlicMiljan\SecureProps\Cache\Exception\InvalidCacheKey;
 use IlicMiljan\SecureProps\Reader\CachingObjectPropertiesReader;
-use IlicMiljan\SecureProps\Reader\Exception\InvalidCacheKey;
 use IlicMiljan\SecureProps\Reader\Exception\InvalidCacheValueDataType;
 use IlicMiljan\SecureProps\Reader\Exception\ObjectPropertyNotFound;
 use IlicMiljan\SecureProps\Reader\ObjectPropertiesReader;

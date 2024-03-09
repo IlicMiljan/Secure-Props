@@ -2,7 +2,7 @@
 
 namespace IlicMiljan\SecureProps\Cache;
 
-use IlicMiljan\SecureProps\Reader\Exception\InvalidCacheKey;
+use IlicMiljan\SecureProps\Cache\Exception\InvalidCacheKey;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
 

@@ -2,7 +2,7 @@
 
 namespace IlicMiljan\SecureProps\Reader;
 
-use IlicMiljan\SecureProps\Reader\Exception\InvalidCacheKey;
+use IlicMiljan\SecureProps\Cache\Exception\InvalidCacheKey;
 use IlicMiljan\SecureProps\Reader\Exception\InvalidCacheValueDataType;
 use IlicMiljan\SecureProps\Reader\Exception\ObjectPropertyNotFound;
 use Psr\Cache\CacheItemInterface;
