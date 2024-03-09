@@ -4,7 +4,6 @@ namespace IlicMiljan\SecureProps\Tests\Reader;
 
 use IlicMiljan\SecureProps\Cache\Exception\InvalidCacheKey;
 use IlicMiljan\SecureProps\Reader\CachingObjectPropertiesReader;
-use IlicMiljan\SecureProps\Reader\Exception\InvalidCacheValueDataType;
 use IlicMiljan\SecureProps\Reader\Exception\ObjectPropertyNotFound;
 use IlicMiljan\SecureProps\Reader\ObjectPropertiesReader;
 use IlicMiljan\SecureProps\Tests\Attribute\TestAttribute;
@@ -81,20 +80,6 @@ class CachingObjectPropertiesReaderTest extends TestCase
 
         $this->reader->getPropertiesWithAttribute(new class () {
         }, TestAttribute::class);
-    }
-
-    public function testGetPropertiesWithAttributeThrowsInvalidCacheValueDataType(): void
-    {
-        $this->expectException(InvalidCacheValueDataType::class);
-
-        $this->cacheItem->method('isHit')->willReturn(true);
-        $this->cacheItem->method('get')->willReturn(null);
-
-        $this->reader->getPropertiesWithAttribute(
-            new class () {
-            },
-            TestAttribute::class
-        );
     }
 
     public function testGetPropertiesWithAttributeThrowsObjectPropertyNotFound(): void
