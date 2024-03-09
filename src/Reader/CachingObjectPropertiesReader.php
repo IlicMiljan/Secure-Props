@@ -25,11 +25,12 @@ class CachingObjectPropertiesReader implements ObjectPropertiesReader
         $propertyArray = $this->cache->get(
             $this->getCacheKey($object, $attributeClass),
             function($cacheItem) use ($object, $attributeClass) {
-                $propertiesWithAttribute = $this->objectPropertiesReader->getPropertiesWithAttribute($object, $attributeClass);
+                $propertiesWithAttribute = $this->objectPropertiesReader->getPropertiesWithAttribute(
+                    $object,
+                    $attributeClass
+                );
 
-                $cacheItem->set($this->getCacheablePropertiesArray($propertiesWithAttribute));
-
-                return $propertiesWithAttribute;
+                return $this->getCacheablePropertiesArray($propertiesWithAttribute);
             }, 3600);
 
         return $this->loadRuntimeReflectionProperties($object, $propertyArray);
