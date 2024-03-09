@@ -1,18 +1,19 @@
 <?php
 
 namespace IlicMiljan\SecureProps\Tests\Reader;
+namespace Tests\IlicMiljan\SecureProps\Reader;
 
+use IlicMiljan\SecureProps\Cache\Cache;
 use IlicMiljan\SecureProps\Cache\Exception\InvalidCacheKey;
 use IlicMiljan\SecureProps\Reader\CachingObjectPropertiesReader;
 use IlicMiljan\SecureProps\Reader\Exception\ObjectPropertyNotFound;
 use IlicMiljan\SecureProps\Reader\ObjectPropertiesReader;
 use IlicMiljan\SecureProps\Tests\Attribute\TestAttribute;
-use IlicMiljan\SecureProps\Tests\Reader\Exception\TestCacheException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
-use Psr\Cache\CacheItemPoolInterface;
 use ReflectionException;
+use ReflectionProperty;
 
 class CachingObjectPropertiesReaderTest extends TestCase
 {
@@ -21,9 +22,9 @@ class CachingObjectPropertiesReaderTest extends TestCase
      */
     private $objectPropertiesReader;
     /**
-     * @var CacheItemPoolInterface&MockObject
+     * @var Cache&MockObject
      */
-    private $cacheItemPool;
+    private $cache;
     /**
      * @var CacheItemInterface&MockObject
      */
@@ -33,72 +34,87 @@ class CachingObjectPropertiesReaderTest extends TestCase
     protected function setUp(): void
     {
         $this->objectPropertiesReader = $this->createMock(ObjectPropertiesReader::class);
-        $this->cacheItemPool = $this->createMock(CacheItemPoolInterface::class);
+        $this->cache = $this->createMock(Cache::class);
         $this->cacheItem = $this->createMock(CacheItemInterface::class);
-        $this->cacheItemPool->method('getItem')->willReturn($this->cacheItem);
 
         $this->reader = new CachingObjectPropertiesReader(
             $this->objectPropertiesReader,
-            $this->cacheItemPool
+            $this->cache
         );
     }
 
-    public function testGetPropertiesWithAttributeReturnsCachedValueOnHit(): void
+    public function testGetPropertiesWithAttributeFromCache(): void
     {
-        $object = new class () {
+        $object = new class {
             #[TestAttribute]
             /** @phpstan-ignore-next-line */
-            private string $propertyWithAttribute;
+            private string $propertyName;
         };
 
-        $this->cacheItem->method('isHit')->willReturn(true);
-        $this->cacheItem->method('get')->willReturn(['propertyWithAttribute']);
-
-        $this->objectPropertiesReader->expects($this->never())->method('getPropertiesWithAttribute');
+        $this->cache->expects($this->once())
+            ->method('get')
+            ->willReturn(['propertyName']);
 
         $result = $this->reader->getPropertiesWithAttribute($object, TestAttribute::class);
-        $this->assertNotEmpty($result);
+
+        $this->assertCount(1, $result);
+        $this->assertInstanceOf(ReflectionProperty::class, $result[0]);
     }
 
-    public function testGetPropertiesWithAttributeFetchesFromDelegateOnCacheMiss(): void
+    /**
+     * @throws ReflectionException
+     */
+    public function testGetPropertiesWithAttributeFromSource(): void
     {
-        $object = new class () {
+        $object = new class {
+            #[TestAttribute]
+            /** @phpstan-ignore-next-line */
+            private string $propertyName;
         };
 
-        $this->cacheItem->method('isHit')->willReturn(false);
-        $this->objectPropertiesReader->method('getPropertiesWithAttribute')->willReturn([]);
+        $properties = [new ReflectionProperty($object, 'propertyName')];
+
+        $this->cache->expects($this->once())
+            ->method('get')
+            ->willReturnCallback(function ($key, $callback) {
+                return $callback($this->cacheItem);
+            });
+
+        $this->objectPropertiesReader->expects($this->once())
+            ->method('getPropertiesWithAttribute')
+            ->willReturn($properties);
 
         $result = $this->reader->getPropertiesWithAttribute($object, TestAttribute::class);
-        $this->assertIsArray($result);
+
+        $this->assertCount(1, $result);
+        $this->assertEquals('propertyName', $result[0]->getName());
     }
 
     public function testGetPropertiesWithAttributeThrowsInvalidCacheKey(): void
     {
         $this->expectException(InvalidCacheKey::class);
 
-        $this->cacheItemPool->method('getItem')->willThrowException(new TestCacheException());
+        $object = new class {
+        };
 
-        $this->reader->getPropertiesWithAttribute(new class () {
-        }, TestAttribute::class);
+        $this->cache->method('get')->willThrowException(new InvalidCacheKey('s'));
+
+        $this->reader->getPropertiesWithAttribute($object, TestAttribute::class);
     }
 
     public function testGetPropertiesWithAttributeThrowsObjectPropertyNotFound(): void
     {
         $this->expectException(ObjectPropertyNotFound::class);
 
-        $this->cacheItem->method('isHit')->willReturn(true);
-        $this->cacheItem->method('get')->willReturn(['nonExistentProperty']);
+        $object = new class {
+        };
 
-        // Configure the mocked ObjectPropertiesReader to throw a ReflectionException
-        // This simulates the scenario where a property does not exist on the object
-        $this->objectPropertiesReader->method('getPropertiesWithAttribute')
-            ->willThrowException(new ReflectionException());
+        $propertyNames = ['nonExistentProperty'];
 
-        $reader = new CachingObjectPropertiesReader($this->objectPropertiesReader, $this->cacheItemPool);
-        $reader->getPropertiesWithAttribute(
-            new class () {
-            },
-            TestAttribute::class
-        );
+        $this->cache->expects($this->once())
+            ->method('get')
+            ->willReturn($propertyNames);
+
+        $this->reader->getPropertiesWithAttribute($object, TestAttribute::class);
     }
 }
