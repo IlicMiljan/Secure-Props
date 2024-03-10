@@ -78,6 +78,10 @@ class ObjectEncryptionService implements EncryptionService
 
         $currentValue = $property->getValue($object);
 
+        if ($currentValue === null) {
+            return;
+        }
+
         if (!is_string($currentValue)) {
             throw new InvalidArgumentException('Value must be string.');
         }
