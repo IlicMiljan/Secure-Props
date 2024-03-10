@@ -104,6 +104,72 @@ class ObjectEncryptionServiceTest extends TestCase
     }
 
     /**
+     * @throws ReflectionException
+     * @throws CipherException
+     * @throws ReaderException
+     */
+    public function testEncryptSkipsNullProperties(): void
+    {
+        $object = new class {
+            #[Encrypted]
+            /** @phpstan-ignore-next-line */
+            public ?string $sensitive = null;
+        };
+
+        $reflectionProperty = new ReflectionProperty($object, 'sensitive');
+        $reflectionProperty->setAccessible(true);
+
+        $this->objectPropertiesReaderMock
+            ->expects($this->once())
+            ->method('getPropertiesWithAttribute')
+            ->with($object, Encrypted::class)
+            ->willReturn([$reflectionProperty]);
+
+        $this->cipherMock
+            ->expects($this->never()) // Ensure encrypt is never called since the property is null
+            ->method('encrypt');
+
+        $encryptedObject = $this->service->encrypt($object);
+
+        // Assert the property remains null, indicating it was skipped
+        /** @phpstan-ignore-next-line */
+        $this->assertNull($encryptedObject->sensitive);
+    }
+
+    /**
+     * @throws ReflectionException
+     * @throws CipherException
+     * @throws ReaderException
+     */
+    public function testDecryptSkipsNullProperties(): void
+    {
+        $object = new class {
+            #[Encrypted]
+            /** @phpstan-ignore-next-line */
+            public ?string $sensitive = null;
+        };
+
+        $reflectionProperty = new ReflectionProperty($object, 'sensitive');
+        $reflectionProperty->setAccessible(true);
+
+        $this->objectPropertiesReaderMock
+            ->expects($this->once())
+            ->method('getPropertiesWithAttribute')
+            ->with($object, Encrypted::class)
+            ->willReturn([$reflectionProperty]);
+
+        $this->cipherMock
+            ->expects($this->never()) // Ensure decrypt is never called since the property is null
+            ->method('decrypt');
+
+        $decryptedObject = $this->service->decrypt($object);
+
+        // Assert the property remains null, indicating it was skipped
+        /** @phpstan-ignore-next-line */
+        $this->assertNull($decryptedObject->sensitive);
+    }
+
+    /**
      * @throws ReaderException
      * @throws CipherException
      */
