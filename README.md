@@ -87,15 +87,35 @@ $cipher = new AsymmetricEncryptionCipher($publicKey, $privateKey);
 
 ## Property Readers
 
-SecureProps comes with two implementations of property readers: a runtime one and a decorator for caching.
+SecureProps provides two types of property readers to handle encrypted properties within your PHP objects efficiently: `RuntimeObjectPropertiesReader` and `CachingObjectPropertiesReader`.
 
 ### RuntimeObjectPropertiesReader
 
-This reader inspects objects at runtime to find properties marked with the `#[Encrypted]` attribute. It uses PHP's reflection capabilities to perform its duties without requiring any caching mechanism.
+The `RuntimeObjectPropertiesReader` dynamically examines objects at runtime to identify properties decorated with the `#[Encrypted]` attribute. Utilizing PHP's reflection requires no additional setup for caching and offers straightforward inspection capabilities.
 
 ### CachingObjectPropertiesReader
 
-This reader wraps another `ObjectPropertiesReader` implementation and caches the results to improve performance. It's particularly useful for applications that repeatedly process the same object types, reducing the overhead of reflection operations. The `PSR-6` caching standard provides a flexible framework for integrating various caching backends, offering developers the freedom to choose a solution that best fits their application's scaling and performance requirements.
+For enhanced performance, especially in applications that frequently deal with the same types of objects, the `CachingObjectPropertiesReader` caches property reading results. This approach reduces the computational overhead associated with reflection.
+
+It integrates seamlessly with `PSR-6` compliant caching solutions, allowing for customizable performance optimization.
+
+#### Quick Start Example
+
+Combining `CachingObjectPropertiesReader` with `RuntimeObjectPropertiesReader` and a `PSR-6` compliant cache implementation:
+
+```php
+// Initialize a PSR-6 cache pool
+$cache = new FilesystemAdapter(...);
+
+// Configure the caching reader
+$reader = new CachingObjectPropertiesReader(
+    new RuntimeObjectPropertiesReader(),
+    new ItemPoolCompatibleCache($cache)
+);
+
+// Set up the ObjectEncryptionService with the reader
+$encryptionService = new ObjectEncryptionService($cipher, $reader);
+```
 
 ## Contributing
 
