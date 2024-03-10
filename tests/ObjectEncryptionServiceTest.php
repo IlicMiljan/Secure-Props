@@ -5,10 +5,11 @@ namespace IlicMiljan\SecureProps\Tests;
 use IlicMiljan\SecureProps\Attribute\Encrypted;
 use IlicMiljan\SecureProps\Cipher\Cipher;
 use IlicMiljan\SecureProps\Cipher\Exception\CipherException;
+use IlicMiljan\SecureProps\Exception\ValueMustBeObject;
+use IlicMiljan\SecureProps\Exception\ValueMustBeString;
 use IlicMiljan\SecureProps\ObjectEncryptionService;
 use IlicMiljan\SecureProps\Reader\Exception\ReaderException;
 use IlicMiljan\SecureProps\Reader\ObjectPropertiesReader;
-use InvalidArgumentException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
@@ -107,9 +108,9 @@ class ObjectEncryptionServiceTest extends TestCase
      * @throws ReaderException
      * @throws CipherException
      */
-    public function testEncryptThrowsInvalidArgumentExceptionForNonObject(): void
+    public function testEncryptThrowsValueMustBeObjectExceptionForNonObject(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ValueMustBeObject::class);
 
         $this->service->encrypt('notAnObject');
     }
@@ -118,9 +119,9 @@ class ObjectEncryptionServiceTest extends TestCase
      * @throws CipherException
      * @throws ReaderException
      */
-    public function testDecryptThrowsInvalidArgumentExceptionForNonObject(): void
+    public function testDecryptThrowsValueMustBeObjectExceptionForNonObject(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ValueMustBeObject::class);
 
         $this->service->decrypt('notAnObject');
     }
@@ -130,7 +131,7 @@ class ObjectEncryptionServiceTest extends TestCase
      * @throws ReaderException
      * @throws CipherException
      */
-    public function testEncryptThrowsInvalidArgumentExceptionForNonString(): void
+    public function testEncryptThrowsValueMustBeStringExceptionForNonString(): void
     {
         $object = new class {
             #[Encrypted]
@@ -144,7 +145,7 @@ class ObjectEncryptionServiceTest extends TestCase
             ->method('getPropertiesWithAttribute')
             ->willReturn([$reflectionProperty]);
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ValueMustBeString::class);
 
         $this->service->encrypt($object);
     }
@@ -154,7 +155,7 @@ class ObjectEncryptionServiceTest extends TestCase
      * @throws CipherException
      * @throws ReaderException
      */
-    public function testDecryptThrowsInvalidArgumentExceptionForNonString(): void
+    public function testDecryptThrowsValueMustBeStringExceptionForNonString(): void
     {
         $object = new class {
             #[Encrypted]
@@ -168,7 +169,7 @@ class ObjectEncryptionServiceTest extends TestCase
             ->method('getPropertiesWithAttribute')
             ->willReturn([$reflectionProperty]);
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ValueMustBeString::class);
 
         $this->service->decrypt($object);
     }

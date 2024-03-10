@@ -6,21 +6,20 @@ use IlicMiljan\SecureProps\Cipher\Exception\FailedCalculatingInitializationVecto
 use IlicMiljan\SecureProps\Cipher\Exception\FailedDecryptingValue;
 use IlicMiljan\SecureProps\Cipher\Exception\FailedEncryptingValue;
 use IlicMiljan\SecureProps\Cipher\Exception\FailedGeneratingInitializationVector;
-use InvalidArgumentException;
+use IlicMiljan\SecureProps\Cipher\Exception\InvalidKeyLength;
 use SensitiveParameter;
 
 class AdvancedEncryptionStandardCipher implements Cipher
 {
     private const CIPHER = 'AES-256-GCM';
     private const TAG_LENGTH = 16;
+    private const KEY_LENGTH = 32;
 
     public function __construct(
         #[SensitiveParameter]
         private string $key
     ) {
-        if (strlen($key) !== 32) {
-            throw new InvalidArgumentException('Key must be 32 bytes (256 bits) long.');
-        }
+        $this->validateKey($key);
     }
 
     /**
@@ -100,5 +99,12 @@ class AdvancedEncryptionStandardCipher implements Cipher
         }
 
         return $ivLength;
+    }
+
+    public function validateKey(string $key): void
+    {
+        if (strlen($key) !== self::KEY_LENGTH) {
+            throw new InvalidKeyLength(self::KEY_LENGTH);
+        }
     }
 }
