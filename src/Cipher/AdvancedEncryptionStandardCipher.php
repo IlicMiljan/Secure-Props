@@ -2,10 +2,10 @@
 
 namespace IlicMiljan\SecureProps\Cipher;
 
-use IlicMiljan\SecureProps\Reader\Exception\FailedCalculatingInitializationVectorLength;
-use IlicMiljan\SecureProps\Reader\Exception\FailedDecryptingValue;
-use IlicMiljan\SecureProps\Reader\Exception\FailedEncryptingValue;
-use IlicMiljan\SecureProps\Reader\Exception\FailedGeneratingInitializationVector;
+use IlicMiljan\SecureProps\Cipher\Exception\FailedCalculatingInitializationVectorLength;
+use IlicMiljan\SecureProps\Cipher\Exception\FailedDecryptingValue;
+use IlicMiljan\SecureProps\Cipher\Exception\FailedEncryptingValue;
+use IlicMiljan\SecureProps\Cipher\Exception\FailedGeneratingInitializationVector;
 use InvalidArgumentException;
 use SensitiveParameter;
 

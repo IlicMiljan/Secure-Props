@@ -2,8 +2,8 @@
 
 namespace IlicMiljan\SecureProps\Cipher;
 
-use IlicMiljan\SecureProps\Reader\Exception\FailedDecryptingValue;
-use IlicMiljan\SecureProps\Reader\Exception\FailedEncryptingValue;
+use IlicMiljan\SecureProps\Cipher\Exception\FailedDecryptingValue;
+use IlicMiljan\SecureProps\Cipher\Exception\FailedEncryptingValue;
 use SensitiveParameter;
 
 class AsymmetricEncryptionCipher implements Cipher

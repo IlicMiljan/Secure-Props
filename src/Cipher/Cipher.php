@@ -2,7 +2,7 @@
 
 namespace IlicMiljan\SecureProps\Cipher;
 
-use IlicMiljan\SecureProps\Reader\Exception\CipherException;
+use IlicMiljan\SecureProps\Cipher\Exception\CipherException;
 use SensitiveParameter;
 
 interface Cipher

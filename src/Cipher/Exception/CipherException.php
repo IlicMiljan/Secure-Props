@@ -1,6 +1,6 @@
 <?php
 
-namespace IlicMiljan\SecureProps\Reader\Exception;
+namespace IlicMiljan\SecureProps\Cipher\Exception;
 
 use Throwable;
 
