@@ -3,6 +3,7 @@
 namespace IlicMiljan\SecureProps;
 
 use IlicMiljan\SecureProps\Cipher\Cipher;
+use IlicMiljan\SecureProps\Cipher\Exception\CipherException;
 use InvalidArgumentException;
 use SensitiveParameter;
 
@@ -16,7 +17,7 @@ class StringEncryptionService implements EncryptionService
     /**
      * @param mixed $value
      * @return string
-     * @throws Reader\Exception\CipherException
+     * @throws CipherException
      */
     public function encrypt(#[SensitiveParameter] mixed $value): string
     {
@@ -30,7 +31,7 @@ class StringEncryptionService implements EncryptionService
     /**
      * @param mixed $value
      * @return string
-     * @throws Reader\Exception\CipherException
+     * @throws CipherException
      */
     public function decrypt(#[SensitiveParameter] mixed $value): string
     {

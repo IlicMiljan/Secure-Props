@@ -4,7 +4,7 @@ namespace IlicMiljan\SecureProps;
 
 use IlicMiljan\SecureProps\Attribute\Encrypted;
 use IlicMiljan\SecureProps\Cipher\Cipher;
-use IlicMiljan\SecureProps\Reader\Exception\CipherException;
+use IlicMiljan\SecureProps\Cipher\Exception\CipherException;
 use IlicMiljan\SecureProps\Reader\Exception\ReaderException;
 use IlicMiljan\SecureProps\Reader\ObjectPropertiesReader;
 use InvalidArgumentException;
