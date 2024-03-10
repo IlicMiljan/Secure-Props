@@ -3,7 +3,7 @@
 namespace IlicMiljan\SecureProps\Tests\Cipher;
 
 use IlicMiljan\SecureProps\Cipher\AdvancedEncryptionStandardCipher;
-use InvalidArgumentException;
+use IlicMiljan\SecureProps\Cipher\Exception\InvalidKeyLength;
 use PHPUnit\Framework\TestCase;
 
 class AdvancedEncryptionStandardCipherTest extends TestCase
@@ -17,7 +17,7 @@ class AdvancedEncryptionStandardCipherTest extends TestCase
 
     public function testConstructWithInvalidKeyLengthThrowsException(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidKeyLength::class);
 
         new AdvancedEncryptionStandardCipher(openssl_random_pseudo_bytes(16));
     }

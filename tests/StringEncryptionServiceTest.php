@@ -4,8 +4,8 @@ namespace IlicMiljan\SecureProps\Tests;
 
 use IlicMiljan\SecureProps\Cipher\Cipher;
 use IlicMiljan\SecureProps\Cipher\Exception\CipherException;
+use IlicMiljan\SecureProps\Exception\ValueMustBeString;
 use IlicMiljan\SecureProps\StringEncryptionService;
-use InvalidArgumentException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -56,9 +56,9 @@ class StringEncryptionServiceTest extends TestCase
     /**
      * @throws CipherException
      */
-    public function testEncryptThrowsInvalidArgumentExceptionForNonString(): void
+    public function testEncryptThrowsValueMustBeStringExceptionForNonString(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ValueMustBeString::class);
 
         $this->service->encrypt(['plainText']);
     }
@@ -66,9 +66,9 @@ class StringEncryptionServiceTest extends TestCase
     /**
      * @throws CipherException
      */
-    public function testDecryptThrowsInvalidArgumentExceptionForNonString(): void
+    public function testDecryptThrowsValueMustBeStringExceptionForNonString(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ValueMustBeString::class);
 
         $this->service->decrypt(['encryptedText']);
     }
