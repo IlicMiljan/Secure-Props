@@ -112,7 +112,6 @@ class ObjectEncryptionServiceTest extends TestCase
     {
         $object = new class {
             #[Encrypted]
-            /** @phpstan-ignore-next-line */
             public ?string $sensitive = null;
         };
 
@@ -145,7 +144,6 @@ class ObjectEncryptionServiceTest extends TestCase
     {
         $object = new class {
             #[Encrypted]
-            /** @phpstan-ignore-next-line */
             public ?string $sensitive = null;
         };
 
