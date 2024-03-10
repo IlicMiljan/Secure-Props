@@ -3,8 +3,8 @@
 namespace IlicMiljan\SecureProps\Tests;
 
 use IlicMiljan\SecureProps\Cipher\Cipher;
+use IlicMiljan\SecureProps\Cipher\Exception\CipherException;
 use IlicMiljan\SecureProps\ObjectEncryptionService;
-use IlicMiljan\SecureProps\Reader\Exception\CipherException;
 use IlicMiljan\SecureProps\Reader\Exception\ReaderException;
 use IlicMiljan\SecureProps\Reader\ObjectPropertiesReader;
 use IlicMiljan\SecureProps\Attribute\Encrypted;
