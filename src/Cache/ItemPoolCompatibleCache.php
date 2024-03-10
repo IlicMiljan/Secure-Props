@@ -20,7 +20,7 @@ class ItemPoolCompatibleCache implements Cache
         try {
             $cacheItem = $this->cachePool->getItem($key);
         } catch (InvalidArgumentException $e) {
-            throw new InvalidCacheKey($key);
+            throw new InvalidCacheKey($key, $e);
         }
 
         if (!$cacheItem->isHit()) {
