@@ -11,7 +11,7 @@ use ReflectionProperty;
 
 class CachingObjectPropertiesReader implements ObjectPropertiesReader
 {
-    const CACHE_TTL_DEFAULT = null;
+    private const CACHE_TTL_DEFAULT = null;
 
     public function __construct(
         private ObjectPropertiesReader $objectPropertiesReader,
