@@ -2,7 +2,6 @@
 
 namespace IlicMiljan\SecureProps\Tests\Reader;
 
-use Attribute;
 use IlicMiljan\SecureProps\Reader\RuntimeObjectPropertiesReader;
 use IlicMiljan\SecureProps\Tests\Attribute\TestAttribute;
 use PHPUnit\Framework\TestCase;

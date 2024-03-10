@@ -2,7 +2,6 @@
 
 namespace IlicMiljan\SecureProps\Cipher\Exception;
 
-use LogicException;
 use RuntimeException;
 use Throwable;
 

@@ -2,14 +2,7 @@
 
 namespace IlicMiljan\SecureProps\Tests\Cipher;
 
-use IlicMiljan\SecureProps\Cipher\AdvancedEncryptionStandardCipher;
 use IlicMiljan\SecureProps\Cipher\AsymmetricEncryptionCipher;
-use IlicMiljan\SecureProps\Cipher\Cipher;
-use IlicMiljan\SecureProps\Reader\Exception\FailedCalculatingInitializationVectorLength;
-use IlicMiljan\SecureProps\Reader\Exception\FailedDecryptingValue;
-use IlicMiljan\SecureProps\Reader\Exception\FailedEncryptingValue;
-use IlicMiljan\SecureProps\Reader\Exception\FailedGeneratingInitializationVector;
-use InvalidArgumentException;
 use OpenSSLAsymmetricKey;
 use PHPUnit\Framework\TestCase;
 

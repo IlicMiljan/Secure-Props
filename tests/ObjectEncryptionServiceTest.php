@@ -2,14 +2,13 @@
 
 namespace IlicMiljan\SecureProps\Tests;
 
+use IlicMiljan\SecureProps\Attribute\Encrypted;
 use IlicMiljan\SecureProps\Cipher\Cipher;
 use IlicMiljan\SecureProps\Cipher\Exception\CipherException;
 use IlicMiljan\SecureProps\ObjectEncryptionService;
 use IlicMiljan\SecureProps\Reader\Exception\ReaderException;
 use IlicMiljan\SecureProps\Reader\ObjectPropertiesReader;
-use IlicMiljan\SecureProps\Attribute\Encrypted;
 use InvalidArgumentException;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
@@ -27,9 +26,6 @@ class ObjectEncryptionServiceTest extends TestCase
     private $objectPropertiesReaderMock;
     private ObjectEncryptionService $service;
 
-    /**
-     * @throws Exception
-     */
     protected function setUp(): void
     {
         $this->cipherMock = $this->createMock(Cipher::class);

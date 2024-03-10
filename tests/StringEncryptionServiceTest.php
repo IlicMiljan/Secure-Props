@@ -2,9 +2,9 @@
 
 namespace IlicMiljan\SecureProps\Tests;
 
+use IlicMiljan\SecureProps\Cipher\Cipher;
 use IlicMiljan\SecureProps\Cipher\Exception\CipherException;
 use IlicMiljan\SecureProps\StringEncryptionService;
-use IlicMiljan\SecureProps\Cipher\Cipher;
 use InvalidArgumentException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
