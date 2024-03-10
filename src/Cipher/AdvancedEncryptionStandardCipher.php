@@ -23,12 +23,7 @@ class AdvancedEncryptionStandardCipher implements Cipher
     }
 
     /**
-     * @param string $string
-     * @return string
-     *
-     * @throws FailedCalculatingInitializationVectorLength
-     * @throws FailedGeneratingInitializationVector
-     * @throws FailedEncryptingValue
+     * @inheritDoc
      */
     public function encrypt(#[SensitiveParameter] string $string): string
     {
@@ -44,11 +39,7 @@ class AdvancedEncryptionStandardCipher implements Cipher
     }
 
     /**
-     * @param string $string
-     * @return string
-     *
-     * @throws FailedCalculatingInitializationVectorLength
-     * @throws FailedDecryptingValue
+     * @inheritDoc
      */
     public function decrypt(#[SensitiveParameter] string $string): string
     {
@@ -90,6 +81,12 @@ class AdvancedEncryptionStandardCipher implements Cipher
         return $iv;
     }
 
+    /**
+     * @param string $cipher
+     * @return int
+     *
+     * @throws FailedCalculatingInitializationVectorLength
+     */
     public function calculateInitializationVectorLength(string $cipher): int
     {
         $ivLength = openssl_cipher_iv_length($cipher);
@@ -101,6 +98,12 @@ class AdvancedEncryptionStandardCipher implements Cipher
         return $ivLength;
     }
 
+    /**
+     * @param string $key
+     * @return void
+     *
+     * @throws InvalidKeyLength
+     */
     public function validateKey(string $key): void
     {
         if (strlen($key) !== self::KEY_LENGTH) {
