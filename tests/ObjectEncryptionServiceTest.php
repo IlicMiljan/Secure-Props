@@ -27,9 +27,6 @@ class ObjectEncryptionServiceTest extends TestCase
     private $objectPropertiesReaderMock;
     private ObjectEncryptionService $service;
 
-    /**
-     * @throws Exception
-     */
     protected function setUp(): void
     {
         $this->cipherMock = $this->createMock(Cipher::class);
