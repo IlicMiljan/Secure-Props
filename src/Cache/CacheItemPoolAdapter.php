@@ -6,7 +6,7 @@ use IlicMiljan\SecureProps\Cache\Exception\InvalidCacheKey;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
 
-class ItemPoolCompatibleCache implements Cache
+class CacheItemPoolAdapter implements Cache
 {
     private CacheItemPoolInterface $cachePool;
 

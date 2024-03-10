@@ -3,14 +3,14 @@
 namespace IlicMiljan\SecureProps\Tests\Cache;
 
 use IlicMiljan\SecureProps\Cache\Exception\InvalidCacheKey;
-use IlicMiljan\SecureProps\Cache\ItemPoolCompatibleCache;
+use IlicMiljan\SecureProps\Cache\CacheItemPoolAdapter;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
 
-class ItemPoolCompatibleCacheTest extends TestCase
+class CacheItemPoolAdapterTest extends TestCase
 {
     /**
      * @var CacheItemPoolInterface&MockObject
@@ -20,7 +20,7 @@ class ItemPoolCompatibleCacheTest extends TestCase
      * @var CacheItemInterface&MockObject
      */
     private $cacheItem;
-    private ItemPoolCompatibleCache $cache;
+    private CacheItemPoolAdapter $cache;
 
     protected function setUp(): void
     {
@@ -28,7 +28,7 @@ class ItemPoolCompatibleCacheTest extends TestCase
 
         $this->cachePool = $this->createMock(CacheItemPoolInterface::class);
         $this->cacheItem = $this->createMock(CacheItemInterface::class);
-        $this->cache = new ItemPoolCompatibleCache($this->cachePool);
+        $this->cache = new CacheItemPoolAdapter($this->cachePool);
     }
 
     public function testGetWithCacheHit(): void
