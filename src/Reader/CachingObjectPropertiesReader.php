@@ -5,14 +5,18 @@ namespace IlicMiljan\SecureProps\Reader;
 use IlicMiljan\SecureProps\Cache\Cache;
 use IlicMiljan\SecureProps\Cache\Exception\InvalidCacheKey;
 use IlicMiljan\SecureProps\Reader\Exception\ObjectPropertyNotFound;
+use Psr\Cache\CacheItemInterface;
 use ReflectionException;
 use ReflectionProperty;
 
 class CachingObjectPropertiesReader implements ObjectPropertiesReader
 {
+    const CACHE_TTL_DEFAULT = null;
+
     public function __construct(
         private ObjectPropertiesReader $objectPropertiesReader,
-        private Cache $cache
+        private Cache $cache,
+        private ?int $cacheTtl = self::CACHE_TTL_DEFAULT
     ) {
     }
 
@@ -24,7 +28,7 @@ class CachingObjectPropertiesReader implements ObjectPropertiesReader
     {
         $propertyArray = $this->cache->get(
             $this->getCacheKey($object, $attributeClass),
-            function ($cacheItem) use ($object, $attributeClass) {
+            function (CacheItemInterface $cacheItem) use ($object, $attributeClass) {
                 $propertiesWithAttribute = $this->objectPropertiesReader->getPropertiesWithAttribute(
                     $object,
                     $attributeClass
@@ -32,7 +36,7 @@ class CachingObjectPropertiesReader implements ObjectPropertiesReader
 
                 return $this->getCacheablePropertiesArray($propertiesWithAttribute);
             },
-            3600
+            $this->cacheTtl
         );
 
         return $this->loadRuntimeReflectionProperties($object, $propertyArray);
