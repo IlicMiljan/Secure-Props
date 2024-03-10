@@ -24,6 +24,7 @@
     "license": "MIT",
     "require": {
         "php": ">=8.0",
+        "ext-openssl": "*",
         "psr/cache": "^2.0|^3.0"
     },
     "require-dev": {
