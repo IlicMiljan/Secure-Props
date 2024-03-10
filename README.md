@@ -97,11 +97,11 @@ The `RuntimeObjectPropertiesReader` dynamically examines objects at runtime to i
 
 For enhanced performance, especially in applications that frequently deal with the same types of objects, the `CachingObjectPropertiesReader` caches property reading results. This approach reduces the computational overhead associated with reflection.
 
-It integrates seamlessly with PSR-6-compliant caching solutions, allowing for customizable performance optimization.
+It integrates seamlessly with `PSR-6` compliant caching solutions, allowing for customizable performance optimization.
 
 #### Quick Start Example
 
-Combining `CachingObjectPropertiesReader` with `RuntimeObjectPropertiesReader` and a PSR-6 compliant cache implementation:
+Combining `CachingObjectPropertiesReader` with `RuntimeObjectPropertiesReader` and a `PSR-6` compliant cache implementation:
 
 ```php
 // Initialize a PSR-6 cache pool
