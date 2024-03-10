@@ -3,8 +3,6 @@
 namespace IlicMiljan\SecureProps;
 
 use IlicMiljan\SecureProps\Cipher\Cipher;
-use IlicMiljan\SecureProps\Cipher\Exception\CipherException;
-use IlicMiljan\SecureProps\Exception\EncryptionServiceException;
 use IlicMiljan\SecureProps\Exception\ValueMustBeString;
 use SensitiveParameter;
 
