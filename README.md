@@ -110,7 +110,7 @@ $cache = new FilesystemAdapter(...);
 // Configure the caching reader
 $reader = new CachingObjectPropertiesReader(
     new RuntimeObjectPropertiesReader(),
-    new ItemPoolCompatibleCache($cache)
+    new CacheItemPoolAdapter($cache)
 );
 
 // Set up the ObjectEncryptionService with the reader
