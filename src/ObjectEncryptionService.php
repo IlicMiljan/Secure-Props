@@ -4,11 +4,8 @@ namespace IlicMiljan\SecureProps;
 
 use IlicMiljan\SecureProps\Attribute\Encrypted;
 use IlicMiljan\SecureProps\Cipher\Cipher;
-use IlicMiljan\SecureProps\Cipher\Exception\CipherException;
-use IlicMiljan\SecureProps\Exception\EncryptionServiceException;
 use IlicMiljan\SecureProps\Exception\ValueMustBeObject;
 use IlicMiljan\SecureProps\Exception\ValueMustBeString;
-use IlicMiljan\SecureProps\Reader\Exception\ReaderException;
 use IlicMiljan\SecureProps\Reader\ObjectPropertiesReader;
 use ReflectionProperty;
 use SensitiveParameter;
@@ -22,12 +19,9 @@ class ObjectEncryptionService implements EncryptionService
     }
 
     /**
-     * @param mixed $value
-     * @return object
+     * @inheritDoc
      *
-     * @throws EncryptionServiceException
-     * @throws CipherException
-     * @throws ReaderException
+     * @return object
      */
     public function encrypt(#[SensitiveParameter] mixed $value): object
     {
@@ -49,13 +43,9 @@ class ObjectEncryptionService implements EncryptionService
     }
 
     /**
-     * @param mixed $value
+     * @inheritDoc
      *
      * @return object
-     *
-     * @throws EncryptionServiceException
-     * @throws CipherException
-     * @throws ReaderException
      */
     public function decrypt(#[SensitiveParameter] mixed $value): object
     {

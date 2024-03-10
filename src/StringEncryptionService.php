@@ -16,12 +16,9 @@ class StringEncryptionService implements EncryptionService
     }
 
     /**
-     * @param mixed $value
+     * @inheritDoc
      *
      * @return string
-     *
-     * @throws EncryptionServiceException
-     * @throws CipherException
      */
     public function encrypt(#[SensitiveParameter] mixed $value): string
     {
@@ -33,11 +30,9 @@ class StringEncryptionService implements EncryptionService
     }
 
     /**
-     * @param mixed $value
-     * @return string
+     * @inheritDoc
      *
-     * @throws EncryptionServiceException
-     * @throws CipherException
+     * @return string
      */
     public function decrypt(#[SensitiveParameter] mixed $value): string
     {
