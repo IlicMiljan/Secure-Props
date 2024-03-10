@@ -15,10 +15,7 @@ class AsymmetricEncryptionCipher implements Cipher
     }
 
     /**
-     * @param string $string
-     * @return string
-     *
-     * @throws FailedEncryptingValue
+     * @inheritDoc
      */
     public function encrypt(#[SensitiveParameter] string $string): string
     {
@@ -30,10 +27,7 @@ class AsymmetricEncryptionCipher implements Cipher
     }
 
     /**
-     * @param string $string
-     * @return string
-     *
-     * @throws FailedDecryptingValue
+     * @inheritDoc
      */
     public function decrypt(#[SensitiveParameter] string $string): string
     {

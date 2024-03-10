@@ -8,9 +8,7 @@ use ReflectionProperty;
 class RuntimeObjectPropertiesReader implements ObjectPropertiesReader
 {
     /**
-     * @param object $object
-     * @param string $attributeClass
-     * @return ReflectionProperty[]
+     * @inheritDoc
      */
     public function getPropertiesWithAttribute(object $object, string $attributeClass): array
     {

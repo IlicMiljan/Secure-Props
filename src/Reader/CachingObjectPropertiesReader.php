@@ -21,8 +21,7 @@ class CachingObjectPropertiesReader implements ObjectPropertiesReader
     }
 
     /**
-     * @throws InvalidCacheKey
-     * @throws ObjectPropertyNotFound
+     * @inheritDoc
      */
     public function getPropertiesWithAttribute(object $object, string $attributeClass): array
     {

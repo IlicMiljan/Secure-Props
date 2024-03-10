@@ -15,6 +15,9 @@ class ItemPoolCompatibleCache implements Cache
         $this->cachePool = $cachePool;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function get(string $key, callable $callable, ?int $ttl = null): mixed
     {
         try {
