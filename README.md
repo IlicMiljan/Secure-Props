@@ -1,6 +1,6 @@
 # SecureProps - PHP Encryption Library
 
-[![stability-release-candidate](https://img.shields.io/badge/stability-pre--release-48c9b0.svg)](https://github.com/mkenney/software-guides/blob/master/STABILITY-BADGES.md#release-candidate)
+[![stability-mature](https://img.shields.io/badge/stability-mature-008000.svg)](https://github.com/mkenney/software-guides/blob/master/STABILITY-BADGES.md#mature)
 ![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/ilicmiljan/secure-props/php-ci.yaml)
 [![codecov](https://codecov.io/github/IlicMiljan/Secure-Props/branch/main/graph/badge.svg?token=7EQBUFHJKR)](https://codecov.io/github/IlicMiljan/Secure-Props)
 ![Packagist PHP Version](https://img.shields.io/packagist/dependency-v/ilicmiljan/secure-props/php)
@@ -123,4 +123,4 @@ Contributions to SecureProps are welcome. Please ensure that your code adheres t
 
 ## License
 
-SecureProps is open-sourced software licensed under the MIT license.
+SecureProps is open-sourced software licensed under the [MIT license](https://github.com/IlicMiljan/Secure-Props/blob/main/LICENSE).
