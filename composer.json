@@ -25,7 +25,7 @@
     "require": {
         "php": ">=8.0",
         "ext-openssl": "*",
-        "psr/cache": "^2.0|^3.0"
+        "psr/cache": "^1.0|^2.0|^3.0"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.0",
