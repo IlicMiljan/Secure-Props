@@ -175,13 +175,13 @@ Encoders are crucial components in the encryption and decryption process,
 transforming data into a format suitable for secure transmission or storage and 
 then back to its original form. 
 
-#### Base64Encoder
+### Base64Encoder
 
 The `Base64Encoder` is designed for encoding binary data into a string of ASCII 
 characters, using the Base64 encoding scheme. This makes the data safe for
 transmission over protocols that are not binary-safe.
 
-#### NullEncoder
+### NullEncoder
 
 The `NullEncoder` serves as a pass-through, meaning it does not alter the input 
 data. This is particularly useful when you want to avoid double-encoding data
