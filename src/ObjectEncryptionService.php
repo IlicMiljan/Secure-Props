@@ -4,9 +4,12 @@ namespace IlicMiljan\SecureProps;
 
 use IlicMiljan\SecureProps\Attribute\Encrypted;
 use IlicMiljan\SecureProps\Cipher\Cipher;
+use IlicMiljan\SecureProps\Cipher\Exception\FailedDecryptingValue;
+use IlicMiljan\SecureProps\Exception\SingleEncryptedAttributeExpected;
 use IlicMiljan\SecureProps\Exception\ValueMustBeObject;
 use IlicMiljan\SecureProps\Exception\ValueMustBeString;
 use IlicMiljan\SecureProps\Reader\ObjectPropertiesReader;
+use ReflectionAttribute;
 use ReflectionProperty;
 use SensitiveParameter;
 
@@ -80,6 +83,41 @@ class ObjectEncryptionService implements EncryptionService
             throw new ValueMustBeString(gettype($currentValue));
         }
 
-        $property->setValue($object, $callback($currentValue));
+        try {
+            $property->setValue($object, $callback($currentValue));
+        } catch (FailedDecryptingValue $e) {
+            $this->handleDecryptionFailure($object, $property, $e);
+        }
+    }
+
+    public function handleDecryptionFailure(
+        object $object,
+        ReflectionProperty $property,
+        FailedDecryptingValue $e,
+    ): void {
+        $placeholderValue = $this->getPropertyPlaceholderValue($property);
+
+        if ($placeholderValue === null) {
+            throw $e;
+        }
+
+        $property->setValue($object, $placeholderValue);
+    }
+
+    private function getPropertyPlaceholderValue(ReflectionProperty $property): ?string
+    {
+        $encryptedAttributes = $property->getAttributes(Encrypted::class);
+
+        if (count($encryptedAttributes) !== 1) {
+            throw new SingleEncryptedAttributeExpected(count($encryptedAttributes));
+        }
+
+        /** @var ReflectionAttribute $encryptedAttribute */
+        $encryptedAttribute = array_pop($encryptedAttributes);
+
+        /** @var Encrypted $encryptedAttributeInstance */
+        $encryptedAttributeInstance = $encryptedAttribute->newInstance();
+
+        return $encryptedAttributeInstance->getPlaceholder();
     }
 }
