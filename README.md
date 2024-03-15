@@ -35,17 +35,22 @@ Ensure that your `composer.json` file is updated and the library is included in 
 
 ### Marking Properties for Encryption
 
-Use the `#[Encrypted]` attribute to mark properties within your classes that you wish to encrypt or decrypt. For example:
+Use the `#[Encrypted]` attribute to mark properties for encryption. This attribute supports an optional `placeholder`
+parameter for customizable decryption failure handling. 
+
+When decryption fails, and a `placeholder` is provided, that value is used instead. If the placeholder is null, 
+an exception may be thrown.
 
 ```php
 use IlicMiljan\SecureProps\Attribute\Encrypted;
 
 class User
 {
-    #[Encrypted]
+    #[Encrypted(placeholder: "***-**-****")]
     private string $socialSecurityNumber;
 
-    // Other properties and methods...
+    #[Encrypted]
+    private string $secretNote;
 }
 ```
 
