@@ -90,6 +90,53 @@ $cipher = new AsymmetricEncryptionCipher($publicKey, $privateKey);
 // Then, pass this cipher to the ObjectEncryptionService as shown above.
 ```
 
+### Tagged Encryption
+
+When working with objects that have properties with both encrypted and non-encrypted values, the `TagAwareCipher` 
+provides an advanced solution. This cipher allows for targeted decryption, operating only on encrypted and tagged 
+properties, which prevents errors when encountering non-encrypted data.
+
+#### How It Works
+
+`TagAwareCipher` automatically tags encrypted data with `<ENC>` and `</ENC>`, making it distinctly identifiable. It 
+specifically looks for these tags during the decryption process to determine which data to decrypt. This targeted 
+approach means that if an object contains tagged (encrypted) and untagged (plain) data, `TagAwareCipher` will only 
+attempt to decrypt the tagged portions.
+
+This avoids the risk of exceptions that typically occur when trying to decrypt data that isn't encrypted, ensuring 
+error-free processing.
+
+> [!IMPORTANT]
+> When using `TagAwareCipher` for decryption, it's crucial to understand that it will only decrypt data wrapped with
+> `<ENC>` and `</ENC>` tags.
+>
+> **If it encounters encrypted data without these tags, the decryption process will skip it,
+> and the data will be returned in its encrypted form.**
+
+Here is an example:
+
+```php
+// Initialize the base cipher with AES encryption.
+// Optionally, attach a NullEncoder to prevent data double-encoding. Useful when
+// the decorator cipher (e.g., TagAwareCipher) applies its own encoding.
+$baseCipher = new AdvancedEncryptionStandardCipher('256-BIT-KEY-HERE', new NullEncoder());
+
+// Initialize TagAwareCipher with your base cipher and an optional custom encoder.
+$cipher = new TagAwareCipher($baseCipher, new Base64Encoder());
+
+// Initialize the encryption service with a runtime object properties reader.
+$encryptionService = new ObjectEncryptionService($cipher, new RuntimeObjectPropertiesReader());
+
+$user = new User();
+$user->setSocialSecurityNumber('123-45-6789');
+
+// Encrypt properties
+$encryptedUser = $encryptionService->encrypt($user);
+
+// Decrypt properties
+$decryptedUser = $encryptionService->decrypt($encryptedUser);
+```
+
 ## Property Readers
 
 SecureProps provides two types of property readers to handle encrypted properties within your PHP objects efficiently: `RuntimeObjectPropertiesReader` and `CachingObjectPropertiesReader`.
