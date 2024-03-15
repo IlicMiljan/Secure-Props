@@ -19,6 +19,8 @@ class AsymmetricEncryptionCipher implements Cipher
     ) {
         if ($encoder === null) {
             $this->encoder =  new Base64Encoder();
+        } else {
+            $this->encoder = $encoder;
         }
     }
 
