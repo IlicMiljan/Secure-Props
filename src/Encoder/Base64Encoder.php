@@ -2,14 +2,22 @@
 
 namespace IlicMiljan\SecureProps\Encoder;
 
+use SensitiveParameter;
+
 class Base64Encoder implements Encoder
 {
-    public function encode(string $value): string
+    /**
+     * @inheritDoc
+     */
+    public function encode(#[SensitiveParameter] string $value): string
     {
         return base64_encode($value);
     }
 
-    public function decode(string $value): string
+    /**
+     * @inheritDoc
+     */
+    public function decode(#[SensitiveParameter] string $value): string
     {
         return base64_decode($value);
     }
