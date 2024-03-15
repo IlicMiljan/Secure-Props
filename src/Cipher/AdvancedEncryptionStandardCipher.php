@@ -7,6 +7,8 @@ use IlicMiljan\SecureProps\Cipher\Exception\FailedDecryptingValue;
 use IlicMiljan\SecureProps\Cipher\Exception\FailedEncryptingValue;
 use IlicMiljan\SecureProps\Cipher\Exception\FailedGeneratingInitializationVector;
 use IlicMiljan\SecureProps\Cipher\Exception\InvalidKeyLength;
+use IlicMiljan\SecureProps\Encoder\Base64Encoder;
+use IlicMiljan\SecureProps\Encoder\Encoder;
 use SensitiveParameter;
 
 class AdvancedEncryptionStandardCipher implements Cipher
@@ -15,11 +17,20 @@ class AdvancedEncryptionStandardCipher implements Cipher
     private const TAG_LENGTH = 16;
     private const KEY_LENGTH = 32;
 
+    private Encoder $encoder;
+
     public function __construct(
         #[SensitiveParameter]
-        private string $key
+        private string $key,
+        ?Encoder $encoder = null
     ) {
         $this->validateKey($key);
+
+        if ($encoder === null) {
+            $this->encoder =  new Base64Encoder();
+        } else {
+            $this->encoder = $encoder;
+        }
     }
 
     /**
@@ -35,15 +46,16 @@ class AdvancedEncryptionStandardCipher implements Cipher
             throw new FailedEncryptingValue();
         }
 
-        return base64_encode($iv . $encryptedString . $tag);
+        return $this->encoder->encode($iv . $encryptedString . $tag);
     }
 
     /**
      * @inheritDoc
+     *
      */
     public function decrypt(#[SensitiveParameter] string $string): string
     {
-        $data = base64_decode($string);
+        $data = $this->encoder->decode($string);
 
         $ivLength = $this->calculateInitializationVectorLength(self::CIPHER);
 
