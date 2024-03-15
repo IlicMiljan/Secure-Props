@@ -5,6 +5,8 @@ namespace IlicMiljan\SecureProps\Tests;
 use IlicMiljan\SecureProps\Attribute\Encrypted;
 use IlicMiljan\SecureProps\Cipher\Cipher;
 use IlicMiljan\SecureProps\Cipher\Exception\CipherException;
+use IlicMiljan\SecureProps\Cipher\Exception\FailedDecryptingValue;
+use IlicMiljan\SecureProps\Exception\EncryptionServiceException;
 use IlicMiljan\SecureProps\Exception\ValueMustBeObject;
 use IlicMiljan\SecureProps\Exception\ValueMustBeString;
 use IlicMiljan\SecureProps\ObjectEncryptionService;
@@ -218,6 +220,7 @@ class ObjectEncryptionServiceTest extends TestCase
      * @throws ReflectionException
      * @throws CipherException
      * @throws ReaderException
+     * @throws EncryptionServiceException
      */
     public function testDecryptThrowsValueMustBeStringExceptionForNonString(): void
     {
@@ -234,6 +237,73 @@ class ObjectEncryptionServiceTest extends TestCase
             ->willReturn([$reflectionProperty]);
 
         $this->expectException(ValueMustBeString::class);
+
+        $this->service->decrypt($object);
+    }
+
+    /**
+     * @throws ReflectionException
+     * @throws ReaderException
+     * @throws CipherException
+     * @throws EncryptionServiceException
+     */
+    public function testDecryptSetsPlaceholderOnFailure(): void
+    {
+        $object = new class {
+            #[Encrypted(placeholder: 'placeholder')]
+            public string $sensitive = 'encryptedText';
+        };
+
+        $reflectionProperty = new ReflectionProperty($object, 'sensitive');
+        $reflectionProperty->setAccessible(true);
+
+        $this->objectPropertiesReaderMock
+            ->expects($this->once())
+            ->method('getPropertiesWithAttribute')
+            ->with($object, Encrypted::class)
+            ->willReturn([$reflectionProperty]);
+
+        $this->cipherMock
+            ->expects($this->once())
+            ->method('decrypt')
+            ->with('encryptedText')
+            ->willThrowException(new FailedDecryptingValue());
+
+        $decryptedObject = $this->service->decrypt($object);
+
+        /** @phpstan-ignore-next-line */
+        $this->assertEquals('placeholder', $decryptedObject->sensitive);
+    }
+
+    /**
+     * @throws ReflectionException
+     * @throws CipherException
+     * @throws ReaderException
+     * @throws EncryptionServiceException
+     */
+    public function testDecryptThrowsExceptionWhenNoPlaceholderAvailable(): void
+    {
+        $object = new class {
+            #[Encrypted]
+            public string $sensitive = 'encryptedText';
+        };
+
+        $reflectionProperty = new ReflectionProperty($object, 'sensitive');
+        $reflectionProperty->setAccessible(true);
+
+        $this->objectPropertiesReaderMock
+            ->expects($this->once())
+            ->method('getPropertiesWithAttribute')
+            ->with($object, Encrypted::class)
+            ->willReturn([$reflectionProperty]);
+
+        $this->cipherMock
+            ->expects($this->once())
+            ->method('decrypt')
+            ->with('encryptedText')
+            ->willThrowException(new FailedDecryptingValue());
+
+        $this->expectException(FailedDecryptingValue::class);
 
         $this->service->decrypt($object);
     }
