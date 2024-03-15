@@ -8,7 +8,6 @@ use SensitiveParameter;
 
 class SensitiveParameterTest extends TestCase
 {
-
     protected function setUp(): void
     {
         if (PHP_VERSION_ID >= 80200) {
