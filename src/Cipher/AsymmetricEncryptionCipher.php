@@ -4,14 +4,22 @@ namespace IlicMiljan\SecureProps\Cipher;
 
 use IlicMiljan\SecureProps\Cipher\Exception\FailedDecryptingValue;
 use IlicMiljan\SecureProps\Cipher\Exception\FailedEncryptingValue;
+use IlicMiljan\SecureProps\Encoder\Base64Encoder;
+use IlicMiljan\SecureProps\Encoder\Encoder;
 use SensitiveParameter;
 
 class AsymmetricEncryptionCipher implements Cipher
 {
+    private Encoder $encoder;
+
     public function __construct(
         private string $publicKey,
-        private string $privateKey
+        private string $privateKey,
+        ?Encoder $encoder = null
     ) {
+        if ($encoder === null) {
+            $this->encoder =  new Base64Encoder();
+        }
     }
 
     /**
@@ -23,7 +31,7 @@ class AsymmetricEncryptionCipher implements Cipher
             throw new FailedEncryptingValue();
         }
 
-        return base64_encode($encrypted);
+        return $this->encoder->encode($encrypted);
     }
 
     /**
@@ -31,7 +39,7 @@ class AsymmetricEncryptionCipher implements Cipher
      */
     public function decrypt(#[SensitiveParameter] string $string): string
     {
-        $data = base64_decode($string);
+        $data = $this->encoder->decode($string);
 
         if (!openssl_private_decrypt($data, $decrypted, $this->privateKey)) {
             throw new FailedDecryptingValue();
