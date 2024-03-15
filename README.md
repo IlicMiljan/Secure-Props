@@ -169,6 +169,56 @@ $reader = new CachingObjectPropertiesReader(
 $encryptionService = new ObjectEncryptionService($cipher, $reader);
 ```
 
+## Encoders
+
+Encoders are crucial components in the encryption and decryption process, 
+transforming data into a format suitable for secure transmission or storage and 
+then back to its original form. 
+
+#### Base64Encoder
+
+The `Base64Encoder` is designed for encoding binary data into a string of ASCII 
+characters, using the Base64 encoding scheme. This makes the data safe for
+transmission over protocols that are not binary-safe.
+
+#### NullEncoder
+
+The `NullEncoder` serves as a pass-through, meaning it does not alter the input 
+data. This is particularly useful when you want to avoid double-encoding data
+that is already in a suitable format for storage or when the encoding process 
+is managed elsewhere.
+
+
+#### Quick Start Example
+
+In the context of initializing the `AdvancedEncryptionStandardCipher` with AES 
+encryption, you can optionally attach a custom encoder.
+
+```php
+// Preventing double-encoding by using NullEncoder with the base cipher
+$cipher = new AdvancedEncryptionStandardCipher('256-BIT-KEY-HERE', new NullEncoder());
+
+
+// Initializing the encryption service with the configured cipher and property reader
+$encryptionService = new ObjectEncryptionService($cipher, new RuntimeObjectPropertiesReader());
+
+// Example of encrypting and decrypting user data
+$user = new User();
+$user->setSocialSecurityNumber('123-45-6789');
+
+// Encrypt properties. The operation returns a string that is not binary-safe,
+// and may require encoding to be safely transmitted or stored.
+$encryptedUser = $encryptionService->encrypt($user);
+
+// Decrypt properties
+$decryptedUser = $encryptionService->decrypt($encryptedUser);
+```
+
+> [!NOTE]  
+> Unless specified otherwise, all ciphers use `Base64Encoder` as the default encoder to ensure the encrypted data is 
+> binary-safe and suitable for transmission or storage across different systems.
+
+
 ## Contributing
 
 Contributions to SecureProps are welcome. Please ensure that your code adheres to the project's coding standards and include tests for new features or bug fixes.
