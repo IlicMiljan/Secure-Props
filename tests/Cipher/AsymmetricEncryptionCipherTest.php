@@ -3,6 +3,7 @@
 namespace IlicMiljan\SecureProps\Tests\Cipher;
 
 use IlicMiljan\SecureProps\Cipher\AsymmetricEncryptionCipher;
+use IlicMiljan\SecureProps\Cipher\Exception\CipherException;
 use IlicMiljan\SecureProps\Encoder\Encoder;
 use OpenSSLAsymmetricKey;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -10,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 class AsymmetricEncryptionCipherTest extends TestCase
 {
-    /** @var Encoder|MockObject */
+    /** @var Encoder&MockObject */
     private $encoder;
     private AsymmetricEncryptionCipher $cipher;
     private AsymmetricEncryptionCipher $cipherWithCustomEncoder;
@@ -35,6 +36,9 @@ class AsymmetricEncryptionCipherTest extends TestCase
         );
     }
 
+    /**
+     * @throws CipherException
+     */
     public function testEncryptAndDecryptSuccessfully(): void
     {
         $encryptedString = $this->cipher->encrypt('plainText');
@@ -43,6 +47,9 @@ class AsymmetricEncryptionCipherTest extends TestCase
         $this->assertEquals('plainText', $decryptedString);
     }
 
+    /**
+     * @throws CipherException
+     */
     public function testEncryptAndDecryptWithCustomEncoder(): void
     {
         $this->encoder->method('encode')->willReturnCallback(function ($data) {

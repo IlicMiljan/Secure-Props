@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 class AdvancedEncryptionStandardCipherTest extends TestCase
 {
-    /** @var Encoder|MockObject */
+    /** @var Encoder&MockObject */
     private $encoder;
     private AdvancedEncryptionStandardCipher $cipher;
     private AdvancedEncryptionStandardCipher $cipherWithCustomEncoder;
