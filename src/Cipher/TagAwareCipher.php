@@ -8,6 +8,9 @@ use SensitiveParameter;
 
 class TagAwareCipher implements Cipher
 {
+    private const START_TAG = '<ENC>';
+    private const END_TAG = '</ENC>';
+
     private Encoder $encoder;
 
     public function __construct(
@@ -25,7 +28,7 @@ class TagAwareCipher implements Cipher
     {
         $encryptedString = $this->cipher->encrypt($string);
 
-        return $this->encoder->encode('<ENC>' . $encryptedString . '</ENC>');
+        return $this->encoder->encode(self::START_TAG . $encryptedString . self::END_TAG);
     }
 
     public function decrypt(#[SensitiveParameter] string $string): string
@@ -36,13 +39,20 @@ class TagAwareCipher implements Cipher
             return $string;
         }
 
-        preg_match('/^<ENC>(.*)<\/ENC>$/', $data, $matches);
-
-        return $this->cipher->decrypt($matches[1]);
+        return $this->cipher->decrypt($this->extractTaggedValue($data));
     }
 
     private function shouldDecrypt(string $string): bool
     {
-        return preg_match('/^<ENC>(.*)<\/ENC>$/', $string) === 1;
+        return str_contains($string, self::START_TAG) && str_contains($string, self::END_TAG);
+    }
+
+    private function extractTaggedValue(string $string): string
+    {
+        $startPos = strpos($string, self::START_TAG);
+        $endPos = strpos($string, self::END_TAG);
+
+        $startPos += strlen(self::START_TAG);
+        return substr($string, $startPos, $endPos - $startPos);
     }
 }
